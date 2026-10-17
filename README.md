@@ -19,17 +19,17 @@ Let $`\mathcal C_1,\dots,\mathcal C_m\subseteq\mathbb F_q^n`$ be linear codes. F
 $`\mathcal C^{(i)}`$ consists of the words $`x\colon[n]^m\to\mathbb F_q`$ all of whose lines in direction
 $`i`$ are codewords of $`\mathcal C_i`$, and
 $`\mathcal C_1\boxplus\dots\boxplus\mathcal C_m:=\mathcal C^{(1)}+\dots+\mathcal C^{(m)}`$. For such a word,
-$`\lvert x\rvert`$ is its Hamming weight and $`\lvert x\rvert_i`$ is the number of lines in direction $`i`$
+$`|x|`$ is its Hamming weight and $`|x|_i`$ is the number of lines in direction $`i`$
 on which $`x`$ is nonzero. The *product expansion* is
 
 ```math
 \rho(\mathcal C_1,\dots,\mathcal C_m):=\frac1n\min_{x\in\mathcal C_1\boxplus\dots\boxplus\mathcal C_m\setminus\{0\}}
-\frac{\lvert x\rvert}{\lvert x\rvert_{\boxplus}},\qquad
-\lvert x\rvert_{\boxplus}:=\min\Bigl\{\sum_i\lvert a_i\rvert_i\Bigm| x=\sum_i a_i,\ a_i\in\mathcal C^{(i)}\Bigr\}.
+\frac{|x|}{|x|_{\boxplus}},\qquad
+|x|_{\boxplus}:=\min\Bigl\{\sum_i|a_i|_i\Bigm| x=\sum_i a_i,\ a_i\in\mathcal C^{(i)}\Bigr\}.
 ```
 
 A bipartite graph with left degrees $`\delta`$ is an $`(\alpha,\varepsilon)`$-expander if every set $`S`$ of
-left vertices with $`\lvert S\rvert\le\alpha\lvert L\rvert`$ has at least $`(1-\varepsilon)\delta\lvert S\rvert`$
+left vertices with $`|S|\le\alpha|L|`$ has at least $`(1-\varepsilon)\delta|S|`$
 neighbours. $`\mathsf{ExpLDPC}(\delta,\alpha,\varepsilon)`$ is the class of codes $`\mathcal C=\ker H`$, where
 $`H`$ is the adjacency matrix of a biregular $`(\alpha,\varepsilon)`$-expander with left degree $`\delta`$
 (the left vertices are the columns of $`H`$, i.e. the positions of the code).
@@ -87,10 +87,10 @@ statements mean what the paper says. They take about 200 lines:
 | --- | --- |
 | field $`\mathbb F_q`$ | any field `F` |
 | word on the cube $`[n]^m`$ | `(ι → Fin n) → F`, in the theorem `ι = Fin m` |
-| line of direction $`i`$ through $`y`$, restriction $`x\vert_\ell`$ | `line i y`, `restrictLine x i y` |
+| line of direction $`i`$ through $`y`$, restriction $`x\|_\ell`$ | `line i y`, `restrictLine x i y` |
 | $`\mathcal C^{(i)}`$ | `colCode C i` |
 | $`\mathcal C_1\boxplus\dots\boxplus\mathcal C_m`$ | `boxplus C` |
-| $`\lvert x\rvert`$, $`\lvert x\rvert_i`$ | `weight x`, `lineWeight x i _` |
+| $`\|x\|`$, $`\|x\|_i`$ | `weight x`, `lineWeight x i _` |
 | $`\rho(\mathcal C_1,\dots,\mathcal C_m)\ge\rho_0`$ | `prodExpanding C ρ₀` |
 | neighbourhood $`N(S)`$ in the Tanner graph of $`H`$ | `nbhd H S` |
 | $`\ker H`$ | `kerCode H` |
@@ -99,7 +99,7 @@ statements mean what the paper says. They take about 200 lines:
 | rate of $`\mathcal C`$ at most $`R`$ | `Module.finrank F C ≤ R * n` |
 
 `prodExpanding C ρ₀` states that every $`x\in\mathcal C_1\boxplus\dots\boxplus\mathcal C_m`$ has a
-decomposition $`x=\sum_i a_i`$, $`a_i\in\mathcal C^{(i)}`$, with $`\rho_0\,n\sum_i\lvert a_i\rvert_i\le\lvert x\rvert`$;
+decomposition $`x=\sum_i a_i`$, $`a_i\in\mathcal C^{(i)}`$, with $`\rho_0\,n\sum_i|a_i|_i\le|x|`$;
 this is equivalent to $`\rho(\mathcal C_1,\dots,\mathcal C_m)\ge\rho_0`$.
 
 The file [`Verify.lean`](Verify.lean) checks that the theorems use only the standard axioms
@@ -141,9 +141,9 @@ Comments in the code refer to the statements of the proof by short labels:
 
 | Label | Statement |
 | --- | --- |
-| `gen-unique` | If $`\lvert S\rvert\le\alpha n`$, then $`S`$ has at least $`(1-2\varepsilon)\delta\lvert S\rvert`$ unique neighbours; the distance of $`\ker H`$ exceeds $`\alpha n`$. |
-| `gen-find` | Bounds for the greedy closure $`F_\theta(R)`$: its size, and $`\operatorname{supp}e\subseteq F_h(R)`$ if $`\operatorname{supp}(He)\subseteq R`$, $`h=(1-2\varepsilon)\delta`$. |
-| `gen-closure` | The smallest $`\eta`$-closed superset of $`S\subseteq[n]^m`$ has size at most $`((2^m+1)/\eta)^m\lvert S\rvert`$ (Kalachev–Panteleev, FOCS 2025, lemma 18). |
+| `gen-unique` | If $`\|S\|\le\alpha n`$, then $`S`$ has at least $`(1-2\varepsilon)\delta\|S\|`$ unique neighbours; the distance of $`\ker H`$ exceeds $`\alpha n`$. |
+| `gen-find` | Bounds for the greedy closure $`F_\theta(R)`$: its size, and $`\mathrm{supp}\,e\subseteq F_h(R)`$ if $`\mathrm{supp}(He)\subseteq R`$, $`h=(1-2\varepsilon)\delta`$. |
+| `gen-closure` | The smallest $`\eta`$-closed superset of $`S\subseteq[n]^m`$ has size at most $`((2^m+1)/\eta)^m\|S\|`$ (Kalachev–Panteleev, FOCS 2025, lemma 18). |
 | `gen-reduction` | If $`\mathrm P(m)`$ holds with threshold $`\eta`$, then $`\rho(\mathcal C_1,\dots,\mathcal C_m)\ge1/(m\,c_{m,\eta})`$. |
 | `P(d)` | Every proper $`\eta`$-closed set $`M\subseteq[n]^d`$, $`\eta\le\eta_d`$, is generated from inside: every word of $`\mathcal C_1\boxplus\dots\boxplus\mathcal C_d`$ supported in $`M`$ is a sum of codewords on lines contained in $`M`$. |
 | `def:syn` | Syndrome condition $`\mathrm S_d(E)`$ with defect $`E`$. |

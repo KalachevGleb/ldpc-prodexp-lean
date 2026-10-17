@@ -21,18 +21,18 @@
 Пусть $`\mathcal C_1,\dots,\mathcal C_m\subseteq\mathbb F_q^n`$ — линейные коды. Код $`\mathcal C^{(i)}`$
 состоит из слов $`x\colon[n]^m\to\mathbb F_q`$, у которых ограничение на каждую линию направления $`i`$
 лежит в $`\mathcal C_i`$, и $`\mathcal C_1\boxplus\dots\boxplus\mathcal C_m:=\mathcal C^{(1)}+\dots+\mathcal C^{(m)}`$.
-Для такого слова $`\lvert x\rvert`$ — вес Хэмминга, $`\lvert x\rvert_i`$ — число линий направления $`i`$,
+Для такого слова $`|x|`$ — вес Хэмминга, $`|x|_i`$ — число линий направления $`i`$,
 на которых $`x`$ ненулевое. *Расширение произведения* —
 
 ```math
 \rho(\mathcal C_1,\dots,\mathcal C_m):=\frac1n\min_{x\in\mathcal C_1\boxplus\dots\boxplus\mathcal C_m\setminus\{0\}}
-\frac{\lvert x\rvert}{\lvert x\rvert_{\boxplus}},\qquad
-\lvert x\rvert_{\boxplus}:=\min\Bigl\{\sum_i\lvert a_i\rvert_i\Bigm| x=\sum_i a_i,\ a_i\in\mathcal C^{(i)}\Bigr\}.
+\frac{|x|}{|x|_{\boxplus}},\qquad
+|x|_{\boxplus}:=\min\Bigl\{\sum_i|a_i|_i\Bigm| x=\sum_i a_i,\ a_i\in\mathcal C^{(i)}\Bigr\}.
 ```
 
 Двудольный граф с левыми степенями $`\delta`$ — $`(\alpha,\varepsilon)`$-экспандер, если у любого
-множества $`S`$ левых вершин с $`\lvert S\rvert\le\alpha\lvert L\rvert`$ не меньше
-$`(1-\varepsilon)\delta\lvert S\rvert`$ соседей. $`\mathsf{ExpLDPC}(\delta,\alpha,\varepsilon)`$ — класс
+множества $`S`$ левых вершин с $`|S|\le\alpha|L|`$ не меньше
+$`(1-\varepsilon)\delta|S|`$ соседей. $`\mathsf{ExpLDPC}(\delta,\alpha,\varepsilon)`$ — класс
 кодов $`\mathcal C=\ker H`$, где $`H`$ — матрица смежности бирегулярного $`(\alpha,\varepsilon)`$-экспандера
 с левой степенью $`\delta`$ (левые вершины — столбцы $`H`$, т.е. позиции кода).
 
@@ -87,10 +87,10 @@ theorem mainTheoremUniform : MainTheoremUniformStatement
 | --- | --- |
 | поле $`\mathbb F_q`$ | любое поле `F` |
 | слово на кубе $`[n]^m`$ | `(ι → Fin n) → F`, в теореме `ι = Fin m` |
-| линия направления $`i`$ через $`y`$, ограничение $`x\vert_\ell`$ | `line i y`, `restrictLine x i y` |
+| линия направления $`i`$ через $`y`$, ограничение $`x\|_\ell`$ | `line i y`, `restrictLine x i y` |
 | $`\mathcal C^{(i)}`$ | `colCode C i` |
 | $`\mathcal C_1\boxplus\dots\boxplus\mathcal C_m`$ | `boxplus C` |
-| $`\lvert x\rvert`$, $`\lvert x\rvert_i`$ | `weight x`, `lineWeight x i _` |
+| $`\|x\|`$, $`\|x\|_i`$ | `weight x`, `lineWeight x i _` |
 | $`\rho(\mathcal C_1,\dots,\mathcal C_m)\ge\rho_0`$ | `prodExpanding C ρ₀` |
 | окрестность $`N(S)`$ в графе Таннера $`H`$ | `nbhd H S` |
 | $`\ker H`$ | `kerCode H` |
@@ -99,7 +99,7 @@ theorem mainTheoremUniform : MainTheoremUniformStatement
 | скорость $`\mathcal C`$ не больше $`R`$ | `Module.finrank F C ≤ R * n` |
 
 `prodExpanding C ρ₀` означает, что у каждого $`x\in\mathcal C_1\boxplus\dots\boxplus\mathcal C_m`$ есть
-разложение $`x=\sum_i a_i`$, $`a_i\in\mathcal C^{(i)}`$, с $`\rho_0\,n\sum_i\lvert a_i\rvert_i\le\lvert x\rvert`$;
+разложение $`x=\sum_i a_i`$, $`a_i\in\mathcal C^{(i)}`$, с $`\rho_0\,n\sum_i|a_i|_i\le|x|`$;
 это равносильно $`\rho(\mathcal C_1,\dots,\mathcal C_m)\ge\rho_0`$.
 
 Файл [`Verify.lean`](Verify.lean) проверяет, что теоремы используют только стандартные аксиомы
@@ -141,9 +141,9 @@ lake env lean Verify.lean # проверка аксиом; при успехе �
 
 | Метка | Утверждение |
 | --- | --- |
-| `gen-unique` | Если $`\lvert S\rvert\le\alpha n`$, то у $`S`$ не меньше $`(1-2\varepsilon)\delta\lvert S\rvert`$ уникальных соседей; расстояние $`\ker H`$ больше $`\alpha n`$. |
-| `gen-find` | Оценки жадного замыкания $`F_\theta(R)`$: его мощность и $`\operatorname{supp}e\subseteq F_h(R)`$ при $`\operatorname{supp}(He)\subseteq R`$, $`h=(1-2\varepsilon)\delta`$. |
-| `gen-closure` | Наименьшее $`\eta`$-замкнутое надмножество $`S\subseteq[n]^m`$ имеет мощность не больше $`((2^m+1)/\eta)^m\lvert S\rvert`$ (Калачев–Пантелеев, FOCS 2025, лемма 18). |
+| `gen-unique` | Если $`\|S\|\le\alpha n`$, то у $`S`$ не меньше $`(1-2\varepsilon)\delta\|S\|`$ уникальных соседей; расстояние $`\ker H`$ больше $`\alpha n`$. |
+| `gen-find` | Оценки жадного замыкания $`F_\theta(R)`$: его мощность и $`\mathrm{supp}\,e\subseteq F_h(R)`$ при $`\mathrm{supp}(He)\subseteq R`$, $`h=(1-2\varepsilon)\delta`$. |
+| `gen-closure` | Наименьшее $`\eta`$-замкнутое надмножество $`S\subseteq[n]^m`$ имеет мощность не больше $`((2^m+1)/\eta)^m\|S\|`$ (Калачев–Пантелеев, FOCS 2025, лемма 18). |
 | `gen-reduction` | Если верно $`\mathrm P(m)`$ с порогом $`\eta`$, то $`\rho(\mathcal C_1,\dots,\mathcal C_m)\ge1/(m\,c_{m,\eta})`$. |
 | `P(d)` | Всякое собственное $`\eta`$-замкнутое множество $`M\subseteq[n]^d`$, $`\eta\le\eta_d`$, порождается изнутри: каждое слово $`\mathcal C_1\boxplus\dots\boxplus\mathcal C_d`$ с носителем в $`M`$ есть сумма кодовых слов на линиях, лежащих в $`M`$. |
 | `def:syn` | Синдромное условие $`\mathrm S_d(E)`$ с дефектом $`E`$. |
