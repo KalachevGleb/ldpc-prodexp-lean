@@ -15,25 +15,29 @@ are lossless vertex expanders is bounded below by a positive constant.
 
 ## The theorem
 
-Let `C₁, …, C_m ⊆ F^n` be linear codes. For `i ∈ [m]`, the code `C^{(i)}` consists of the words
-`x : [n]^m → F` all of whose lines in direction `i` are codewords of `Cᵢ`, and
-`C₁ ⊞ ⋯ ⊞ C_m := C^{(1)} + ⋯ + C^{(m)}`. For such a word, `|x|` is its Hamming weight and `|x|ᵢ` is the
-number of lines in direction `i` on which `x` is nonzero. The *product expansion* is
+Let $`\mathcal C_1,\dots,\mathcal C_m\subseteq\mathbb F_q^n`$ be linear codes. For $`i\in[m]`$, the code
+$`\mathcal C^{(i)}`$ consists of the words $`x\colon[n]^m\to\mathbb F_q`$ all of whose lines in direction
+$`i`$ are codewords of $`\mathcal C_i`$, and
+$`\mathcal C_1\boxplus\dots\boxplus\mathcal C_m:=\mathcal C^{(1)}+\dots+\mathcal C^{(m)}`$. For such a word,
+$`\lvert x\rvert`$ is its Hamming weight and $`\lvert x\rvert_i`$ is the number of lines in direction $`i`$
+on which $`x`$ is nonzero. The *product expansion* is
 
-```text
-ρ(C₁, …, C_m) := min over x ∈ C₁ ⊞ ⋯ ⊞ C_m, x ≠ 0, of  |x| / (n · min Σᵢ |aᵢ|ᵢ),
+```math
+\rho(\mathcal C_1,\dots,\mathcal C_m):=\frac1n\min_{x\in\mathcal C_1\boxplus\dots\boxplus\mathcal C_m\setminus\{0\}}
+\frac{\lvert x\rvert}{\lvert x\rvert_{\boxplus}},\qquad
+\lvert x\rvert_{\boxplus}:=\min\Bigl\{\sum_i\lvert a_i\rvert_i\Bigm| x=\sum_i a_i,\ a_i\in\mathcal C^{(i)}\Bigr\}.
 ```
 
-where the inner minimum is over all decompositions `x = Σᵢ aᵢ` with `aᵢ ∈ C^{(i)}`.
+A bipartite graph with left degrees $`\delta`$ is an $`(\alpha,\varepsilon)`$-expander if every set $`S`$ of
+left vertices with $`\lvert S\rvert\le\alpha\lvert L\rvert`$ has at least $`(1-\varepsilon)\delta\lvert S\rvert`$
+neighbours. $`\mathsf{ExpLDPC}(\delta,\alpha,\varepsilon)`$ is the class of codes $`\mathcal C=\ker H`$, where
+$`H`$ is the adjacency matrix of a biregular $`(\alpha,\varepsilon)`$-expander with left degree $`\delta`$
+(the left vertices are the columns of $`H`$, i.e. the positions of the code).
 
-A bipartite graph with left degrees `δ` is an `(α, ε)`-expander if every set `S` of left vertices
-with `|S| ≤ α·|L|` has at least `(1 − ε)·δ·|S|` neighbours. `ExpLDPC(δ, α, ε)` is the class of codes
-`C = ker H`, where `H` is the adjacency matrix of a biregular `(α, ε)`-expander with left degree `δ`
-(the left vertices are the columns of `H`, i.e. the positions of the code).
-
-**Theorem 1.** For all `m, δ ≥ 1`, `R₁, …, R_m ∈ (0, 1)`, `α > 0` and `ε ∈ [0, 1/16]` there is `ρ₀ > 0`,
-depending only on `m`, `α` and `Δ := ⌊δ / (1 − maxᵢ Rᵢ)⌋`, such that `ρ(C₁, …, C_m) ≥ ρ₀` for every
-length `n` and all codes `Cᵢ ∈ ExpLDPC(δ, α, ε)` of length `n` and rate at most `Rᵢ`.
+**Theorem 1.** For all $`m,\delta\ge1`$, $`R_1,\dots,R_m\in(0,1)`$, $`\alpha>0`$ and $`\varepsilon\in[0,1/16]`$
+there is $`\rho_0>0`$, depending only on $`m`$, $`\alpha`$ and $`\Delta:=\lfloor\delta/(1-\max_iR_i)\rfloor`$,
+such that $`\rho(\mathcal C_1,\dots,\mathcal C_m)\ge\rho_0`$ for every length $`n`$ and all codes
+$`\mathcal C_i\in\mathsf{ExpLDPC}(\delta,\alpha,\varepsilon)`$ of length $`n`$ and rate at most $`R_i`$.
 
 In Lean ([`ProductExpansion/Paper.lean`](ProductExpansion/Paper.lean),
 [`ProductExpansion/Main.lean`](ProductExpansion/Main.lean)):
@@ -50,11 +54,11 @@ def PaperTheoremStatement : Prop :=
 theorem paperTheorem : PaperTheoremStatement
 ```
 
-The single function `ρ m Δ α` expresses that the constant depends only on `m`, `Δ` and `α`: it
-does not depend on the field, the length `n`, the left degree `δ` or `ε`. The formal statement is
-slightly more general than the text: the field `F` is arbitrary (finite or not), only the support
-of `H` matters (its nonzero entries are arbitrary), and `Rmax` is any common upper bound for the
-rates.
+The single function `ρ m Δ α` expresses that the constant depends only on $`m`$, $`\Delta`$ and
+$`\alpha`$: it does not depend on the field, the length $`n`$, the left degree $`\delta`$ or $`\varepsilon`$.
+The formal statement is slightly more general than the text: the field `F` is arbitrary (finite or
+not), only the support of $`H`$ matters (its nonzero entries are arbitrary), and `Rmax` is any common
+upper bound for the rates.
 
 The theorem is derived from a form with a bound on the right degrees instead of the rates, in which
 the graphs need not be regular on the right
@@ -81,21 +85,22 @@ statements mean what the paper says. They take about 200 lines:
 
 | Paper | Lean |
 | --- | --- |
-| field `F_q` | any field `F` |
-| word on the cube `[n]^m` | `(ι → Fin n) → F`, in the theorem `ι = Fin m` |
-| line of direction `i` through `y`, restriction `x\|_ℓ` | `line i y`, `restrictLine x i y` |
-| `C^{(i)}` | `colCode C i` |
-| `C₁ ⊞ ⋯ ⊞ C_m` | `boxplus C` |
-| `\|x\|`, `\|x\|ᵢ` | `weight x`, `lineWeight x i _` |
-| `ρ(C₁, …, C_m) ≥ ρ₀` | `prodExpanding C ρ₀` |
-| neighbourhood `N(S)` in the Tanner graph of `H` | `nbhd H S` |
-| `ker H` | `kerCode H` |
-| `(α, ε)`-expander, left degree `δ`, right degrees `≤ Δ` | `IsExpanderMatrix H δ Δ α ε` |
-| `C ∈ ExpLDPC(δ, α, ε)` | `InELDPC C δ α ε` |
-| rate of `C` at most `R` | `Module.finrank F C ≤ R * n` |
+| field $`\mathbb F_q`$ | any field `F` |
+| word on the cube $`[n]^m`$ | `(ι → Fin n) → F`, in the theorem `ι = Fin m` |
+| line of direction $`i`$ through $`y`$, restriction $`x\vert_\ell`$ | `line i y`, `restrictLine x i y` |
+| $`\mathcal C^{(i)}`$ | `colCode C i` |
+| $`\mathcal C_1\boxplus\dots\boxplus\mathcal C_m`$ | `boxplus C` |
+| $`\lvert x\rvert`$, $`\lvert x\rvert_i`$ | `weight x`, `lineWeight x i _` |
+| $`\rho(\mathcal C_1,\dots,\mathcal C_m)\ge\rho_0`$ | `prodExpanding C ρ₀` |
+| neighbourhood $`N(S)`$ in the Tanner graph of $`H`$ | `nbhd H S` |
+| $`\ker H`$ | `kerCode H` |
+| $`(\alpha,\varepsilon)`$-expander, left degree $`\delta`$, right degrees $`\le\Delta`$ | `IsExpanderMatrix H δ Δ α ε` |
+| $`\mathcal C\in\mathsf{ExpLDPC}(\delta,\alpha,\varepsilon)`$ | `InELDPC C δ α ε` |
+| rate of $`\mathcal C`$ at most $`R`$ | `Module.finrank F C ≤ R * n` |
 
-`prodExpanding C ρ₀` states that every `x ∈ C₁ ⊞ ⋯ ⊞ C_m` has a decomposition `x = Σᵢ aᵢ`,
-`aᵢ ∈ C^{(i)}`, with `ρ₀ · n · Σᵢ |aᵢ|ᵢ ≤ |x|`; this is equivalent to `ρ(C₁, …, C_m) ≥ ρ₀`.
+`prodExpanding C ρ₀` states that every $`x\in\mathcal C_1\boxplus\dots\boxplus\mathcal C_m`$ has a
+decomposition $`x=\sum_i a_i`$, $`a_i\in\mathcal C^{(i)}`$, with $`\rho_0\,n\sum_i\lvert a_i\rvert_i\le\lvert x\rvert`$;
+this is equivalent to $`\rho(\mathcal C_1,\dots,\mathcal C_m)\ge\rho_0`$.
 
 The file [`Verify.lean`](Verify.lean) checks that the theorems use only the standard axioms
 `propext`, `Classical.choice` and `Quot.sound`; in particular, there is no `sorry`.
@@ -122,34 +127,34 @@ The same steps run in GitHub Actions on every push
 
 | Module | Content |
 | --- | --- |
-| `Basic` | Cube, lines, `C^{(i)}`, `⊞`, weights, product expansion, expander matrices. |
-| `Expander` | Unique neighbours, distance `> αn`, greedy closure `F_θ` (lemmas `gen-unique`, `gen-find`). |
-| `Cube`, `CubeLemmas` | Faces, bases `B_I`, sets `Y_I`, closed sets and their properties (F1)–(F3), `L(M)`. |
-| `Closure`, `Reduction` | Small closed supersets (`gen-closure`), reduction of product expansion to `P(m)` (`gen-reduction`), the case `αn < 2`. |
-| `Syndrome`, `FaceSyn` | Syndrome condition `S(E)` (`def:syn`), face-syndrome lemma (`face-syn`). |
+| `Basic` | Cube, lines, $`\mathcal C^{(i)}`$, $`\boxplus`$, weights, product expansion, expander matrices. |
+| `Expander` | Unique neighbours, distance $`>\alpha n`$, greedy closure $`F_\theta`$ (lemmas `gen-unique`, `gen-find`). |
+| `Cube`, `CubeLemmas` | Faces, bases $`B_I`$, sets $`Y_I`$, closed sets and their properties (F1)–(F3), $`L(M)`$. |
+| `Closure`, `Reduction` | Small closed supersets (`gen-closure`), reduction of product expansion to $`\mathrm P(m)`$ (`gen-reduction`), the case $`\alpha n<2`$. |
+| `Syndrome`, `FaceSyn` | Syndrome condition $`\mathrm S(E)`$ (`def:syn`), face-syndrome lemma (`face-syn`). |
 | `Canonical` | Canonical error sets (`def:can`), lemma `CL`, good lines (`good`). |
-| `MainInterface`, `Step2` … `Step5` | Statements and proofs of steps 2–5 of lemma `D(d)`. |
-| `MainLemma` | Constants `κ_d`, lemma `D(d)` by induction, corollary `P(d)`, theorem 1 for collections of expander matrices. |
+| `MainInterface`, `Step2` … `Step5` | Statements and proofs of steps 2–5 of lemma $`\mathrm D(d)`$. |
+| `MainLemma` | Constants $`\kappa_d`$, lemma $`\mathrm D(d)`$ by induction, corollary $`\mathrm P(d)`$, theorem 1 for collections of expander matrices. |
 | `Paper`, `Main` | Right degrees from the rates; the final theorems. |
 
 Comments in the code refer to the statements of the proof by short labels:
 
 | Label | Statement |
 | --- | --- |
-| `gen-unique` | If `\|S\| ≤ αn`, then `S` has at least `(1 − 2ε)δ\|S\|` unique neighbours; the distance of `ker H` exceeds `αn`. |
-| `gen-find` | Bounds for the greedy closure `F_θ(R)`: its size, and `supp e ⊆ F_h(R)` if `supp(He) ⊆ R`, `h = (1 − 2ε)δ`. |
-| `gen-closure` | The smallest `η`-closed superset of `S ⊆ [n]^m` has size at most `((2^m + 1)/η)^m \|S\|` (Kalachev–Panteleev, FOCS 2025, lemma 18). |
-| `gen-reduction` | If `P(m)` holds with threshold `η`, then `ρ(C₁, …, C_m) ≥ 1/(m·c_{m,η})`. |
-| `P(d)` | Every proper `η`-closed set `M ⊆ [n]^d`, `η ≤ η_d`, is generated from inside: every word of `C₁ ⊞ ⋯ ⊞ C_d` supported in `M` is a sum of codewords on lines contained in `M`. |
-| `def:syn` | Syndrome condition `S_d(E)` with defect `E`. |
-| `face-syn` | The restriction of a word satisfying `S_d(E)` to a face satisfies the syndrome condition with an explicit defect. |
-| `def:can` | Canonical error sets `Bad_J`, `Can(Y)`, `Ŷ`. |
+| `gen-unique` | If $`\lvert S\rvert\le\alpha n`$, then $`S`$ has at least $`(1-2\varepsilon)\delta\lvert S\rvert`$ unique neighbours; the distance of $`\ker H`$ exceeds $`\alpha n`$. |
+| `gen-find` | Bounds for the greedy closure $`F_\theta(R)`$: its size, and $`\operatorname{supp}e\subseteq F_h(R)`$ if $`\operatorname{supp}(He)\subseteq R`$, $`h=(1-2\varepsilon)\delta`$. |
+| `gen-closure` | The smallest $`\eta`$-closed superset of $`S\subseteq[n]^m`$ has size at most $`((2^m+1)/\eta)^m\lvert S\rvert`$ (Kalachev–Panteleev, FOCS 2025, lemma 18). |
+| `gen-reduction` | If $`\mathrm P(m)`$ holds with threshold $`\eta`$, then $`\rho(\mathcal C_1,\dots,\mathcal C_m)\ge1/(m\,c_{m,\eta})`$. |
+| `P(d)` | Every proper $`\eta`$-closed set $`M\subseteq[n]^d`$, $`\eta\le\eta_d`$, is generated from inside: every word of $`\mathcal C_1\boxplus\dots\boxplus\mathcal C_d`$ supported in $`M`$ is a sum of codewords on lines contained in $`M`$. |
+| `def:syn` | Syndrome condition $`\mathrm S_d(E)`$ with defect $`E`$. |
+| `face-syn` | The restriction of a word satisfying $`\mathrm S_d(E)`$ to a face satisfies the syndrome condition with an explicit defect. |
+| `def:can` | Canonical error sets $`\mathrm{Bad}_J`$, $`\mathrm{Can}(Y)`$, $`\widehat Y`$. |
 | `CL` | Closedness and consistency of the canonical sets. |
 | `good` | Existence and properties (G1)–(G4) of a good line. |
-| `D(d)` | Decoding with a defect, the main lemma; proved by induction on `d` in steps 1–5. |
+| `D(d)` | Decoding with a defect, the main lemma; proved by induction on $`d`$ in steps 1–5. |
 
-Without loss of generality the proof assumes `α ≤ 1` and `ε = 1/16`, since the expansion property
-is monotone in these parameters.
+Without loss of generality the proof assumes $`\alpha\le1`$ and $`\varepsilon=1/16`$, since the expansion
+property is monotone in these parameters.
 
 ## Use of AI tools
 
