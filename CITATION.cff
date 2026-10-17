@@ -1,0 +1,28 @@
+cff-version: 1.2.0
+message: "If you use this formalization, please cite the paper below."
+title: "Product expansion of LDPC codes: Lean 4 formalization"
+type: software
+authors:
+  - family-names: Kalachev
+    given-names: Gleb
+    affiliation: "Lomonosov Moscow State University"
+license: Apache-2.0
+repository-code: "https://github.com/KalachevGleb/ldpc-prodexp-lean"
+keywords:
+  - Lean 4
+  - Mathlib
+  - LDPC codes
+  - expander codes
+  - tensor product codes
+  - product expansion
+preferred-citation:
+  type: article
+  title: "Product expansion of LDPC codes"
+  authors:
+    - family-names: Kalachev
+      given-names: Gleb
+      affiliation: "Lomonosov Moscow State University"
+  journal: "Intelligent Systems. Theory and Applications"
+  languages:
+    - rus
+  status: in-press
